@@ -88,3 +88,24 @@ graph TD
 3. **Управління дозволами (Permissions):** iOS традиційно суворіша щодо приватності, вимагаючи детальних описів `Info.plist` для будь-якого доступу (камера, фото) і питає користувача під час виконання (Runtime). Android також перейшов на Runtime дозволи, але має ще систему Install-time дозволів у `AndroidManifest.xml` та специфічні обмеження файлової системи (Scoped Storage). Розробник має враховувати різні флоу відмови від дозволів.
 
 ---
+
+## 5. Висновок
+
+**Рішення:** При створенні нативних додатків для обох платформ одночасно (щоб уникнути подвійного написання логіки), архітектуру необхідно будувати з жорстким відокремленням бізнес-логіки від UI-шару (за допомогою патернів MVVM, Clean Architecture) та розглянути використання Kotlin Multiplatform Mobile (KMM) для спільного ядра.
+
+**Три аргументи на користь цього рішення:**
+1. **Зниження витрат на розробку та тестування:** Бізнес-логіка (робота з мережею, бази даних, валідація) пишеться і тестується один раз, а не дублюється для Swift і Kotlin.
+2. **Паритет фічей (Feature Parity):** Додатки на iOS та Android будуть працювати ідентично на рівні логіки, виключаючи ситуації, коли розрахунки чи поведінка відрізняються через платформні баги.
+3. **Нативний досвід (Native UX/UI):** Відокремлення UI дозволяє використовувати рідні для кожної платформи інструменти (SwiftUI для iOS, Compose для Android), зберігаючи бездоганну плавність та інтеграцію з системою.
+
+**Визнаний ризик:**
+* **Ризик "Найменшого спільного знаменника":** Уніфікація архітектури може ускладнити або зробити неможливим використання глибоко специфічних для однієї платформи фішок (наприклад, Dynamic Island у нових iPhone або специфічних віджетів Android), що потребуватиме написання складних платформних "мостів" (bridges).
+
+---
+
+## 6. Джерела
+
+1. Google Developers: *Android Platform Architecture* — [https://developer.android.com/guide/platform](https://developer.android.com/guide/platform) (Дата звернення: 12.09.2026).
+2. Apple Developer Documentation: *About the iOS Technologies (Core OS, Core Services)* — [https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/OSX_Technology_Overview/About/About.html](https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/OSX_Technology_Overview/About/About.html) (Дата звернення: 12.09.2026).
+3. Android Developers: *Activity Lifecycle Concepts* — [https://developer.android.com/guide/components/activities/activity-lifecycle](https://developer.android.com/guide/components/activities/activity-lifecycle) (Дата звернення: 12.09.2026).
+4. Apple Developer Documentation: *UIViewController* — [https://developer.apple.com/documentation/uikit/uiviewcontroller](https://developer.apple.com/documentation/uikit/uiviewcontroller) (Дата звернення: 12.09.2026).
